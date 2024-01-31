@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < 256; i++) {
         for (int j = 0; j < 256; j++){
             for (int k = 0; k < 256; k++) {
-                rgb = trilinearInterpolation(make_float3(i, j, k), lutValues, LUT_SIZE, 10);
+                rgb = trilinearInterpolation(make_float3(i, j, k), lutValues, LUT_SIZE, 8);
                 interpolatedLUTValues[i * 256 * 256 * 3 + j * 256 * 3 + k * 3] = static_cast<uint8_t>(rgb.x);
                 interpolatedLUTValues[i * 256 * 256 * 3 + j * 256 * 3 + k * 3 + 1] = static_cast<uint8_t>(rgb.y);
                 interpolatedLUTValues[i * 256 * 256 * 3 + j * 256 * 3 + k * 3 + 2] = static_cast<uint8_t>(rgb.z);

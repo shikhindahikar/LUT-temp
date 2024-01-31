@@ -127,7 +127,6 @@ float3 trilinearInterpolation(float3 pos, const float* lut, int lutSize, uint8_t
 	float3 c = Interpolate(c0, c1, d.z);
 
     // create a vector out of all the coefficients
-
     float3 result = make_float3(static_cast<uint8_t>(c.x * normFactor), static_cast<uint8_t>(c.y * normFactor), static_cast<uint8_t>(c.z * normFactor));
     return result;
 }
@@ -135,24 +134,42 @@ float3 trilinearInterpolation(float3 pos, const float* lut, int lutSize, uint8_t
 // Load the .cube LUT file
 void getLutValues(std::string filename, int lutSize, float* values) {
     std::ifstream file(filename);
-    std::cout << "Loading LUT file..." << std::endl;
+    std::cout << "Reading LUT file..." << std::endl;
     if (!file.is_open()) {
-        std::cerr << "Unable to open the file." << std::endl;
-        // exit the program
+        std::cerr << "Error opening the file." << std::endl;
+        exit(1);
+    }
+    
+    // Read and ignore the title line
+    std::string title;
+    std::getline(file, title);
+    title = title.substr(0, title.size() - 1); // Remove trailing newline
+
+    // Read the LUT size
+    std::string lutSizeLine;
+    std::getline(file, lutSizeLine);
+    std::istringstream lutSizeStream(lutSizeLine);
+    std::string discard;
+    int lut_size;
+
+    lutSizeStream >> discard >> lut_size;
+    
+    if (lut_size != lutSize) {
+        std::cerr << "Error: LUT size does not match the specified size." << std::endl;
         exit(1);
     }
 
+    // Count the number of elements
+    int elementCount = 0;
     std::string line;
-    int index = 0;
+
     while (std::getline(file, line)) {
-        std::istringstream iss(line);
-        float value;
-        int lut_size;
-        // skip the first integer and save rest of the numbers as floats
-        iss >> lut_size;
-        while (iss >> value) {
-            values[index] = value;
-            index++;
+        std::istringstream valuesStream(line);
+        std::string value;
+
+        while (valuesStream >> value) {
+            values[elementCount] = std::stof(value);
+            elementCount++;
         }
     }
 
@@ -161,7 +178,7 @@ void getLutValues(std::string filename, int lutSize, float* values) {
 
 // CUDA kernel to apply LUT to each pixel in parallel
 __global__
-void applyLUTKernel(const unsigned char* input, unsigned char* output, int rows, int cols, const uint8_t* lut) {
+void applyLUTKernel(const uint8_t* input, uint8_t* output, int rows, int cols, const uint8_t* lut) {
     int i = blockIdx.y * blockDim.y + threadIdx.y;
     int j = blockIdx.x * blockDim.x + threadIdx.x;
 
