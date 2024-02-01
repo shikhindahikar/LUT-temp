@@ -48,6 +48,11 @@ int main(int argc, char* argv[]) {
     // free memory
     delete[] lutValues;
 
+    // put lutValues into device memory
+    uint8_t* d_lutValues;
+    cudaMalloc((void**)&d_lutValues, 256 * 256 * 256 * 3 * sizeof(uint8_t));
+    cudaMemcpy(d_lutValues, interpolatedLUTValues, 256 * 256 * 256 * 3 * sizeof(uint8_t), cudaMemcpyHostToDevice);
+
     std::string ffmpeg_path = "ffmpeg";
 
     // command to run ffmpeg
@@ -73,15 +78,14 @@ int main(int argc, char* argv[]) {
         uint8_t* d_out_frame;
         cudaMalloc((void**)&d_out_frame, H_BUFF * W_BUFF * 3 * sizeof(uint8_t));
         cudaMemcpy(d_out_frame, out_frame, H_BUFF * W_BUFF * 3 * sizeof(uint8_t), cudaMemcpyHostToDevice);
+        free(out_frame);
         
-        cudauyvy2rgb<<<50, 256>>>(H_BUFF * W_BUFF, d_frame, d_out_frame);
+        cudauyvy2rgb<<<960, 256>>>(H_BUFF * W_BUFF, d_frame, d_out_frame);
+        cudaFree(d_frame);
+        
         // copy out_frame from device to host
         cudaMemcpy(frame, d_out_frame, H_BUFF * W_BUFF * 3 * sizeof(uint8_t), cudaMemcpyDeviceToHost);
-
-        // put lutValues into device memory
-        uint8_t* d_lutValues;
-        cudaMalloc((void**)&d_lutValues, 256 * 256 * 256 * 3 * sizeof(uint8_t));
-        cudaMemcpy(d_lutValues, interpolatedLUTValues, 256 * 256 * 256 * 3 * sizeof(uint8_t), cudaMemcpyHostToDevice);
+        cudaFree(d_out_frame);
 
         // apply LUTs
         uint8_t* final_frame = applyLUTtoFrameCUDA(frame, d_lutValues, LUT_SIZE);
@@ -96,16 +100,13 @@ int main(int argc, char* argv[]) {
 
         // free memory
         free(frame);
-        free(out_frame);
-        cudaFree(d_frame);
-        cudaFree(d_out_frame);
-        cudaFree(d_lutValues);
         frame_mat.release();
     }
 
     // free memory
     free(raw_image);
     delete[] interpolatedLUTValues;
+    cudaFree(d_lutValues);
     pclose(pipe);
 
     // Close all windows
