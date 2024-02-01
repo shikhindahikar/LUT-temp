@@ -17,8 +17,10 @@ float InterpolateHelper(float v0, float v1, float f)
 	return v0 + (v1 - v0) * f;
 }
 
-float3 trilinearInterpolation(float3 pos, const float* lut, int lutSize, uint8_t bitDepth) {
+float3 trilinearInterpolation(float3 pos, float* lut, const size_t lutSize, uint8_t bitDepth) {
     
+    const size_t totalLutSize = lutSize * lutSize * lutSize * 3;
+
     float R = static_cast<float>(pos.x);
     float G = static_cast<float>(pos.y);
     float B = static_cast<float>(pos.z);
@@ -51,59 +53,67 @@ float3 trilinearInterpolation(float3 pos, const float* lut, int lutSize, uint8_t
 	// y changes second fastest and represents a row in the cube. Add the lut size (the size of one dimension) when it is set
 	// z changes the slowest and represents the plane in the cube. Add the square of the lut size when it is set
 
-	int xOffset = 1;
-	int yOffset = lutSize;
-	int zOffset = lutSize * lutSize;
+	size_t xOffset = lutSize * lutSize * 3;
+	size_t yOffset = lutSize * 3;
+	size_t zOffset = 1 * 3;
+
+    // To prevent the out of bounds, we will start the index from 0 + difference again whenever an index is out of bounds
     
     // multiply by the number of components in an RGB triplet (3)
 	// c000
-	int index0 = (intZ * zOffset + intY * yOffset + intX * xOffset);
+	size_t index0 = (intZ * zOffset + intY * yOffset + intX * xOffset);
 
 	// c001
-	int index1 = (index0 + zOffset);
+	size_t index1 = (index0 + xOffset);
+    if (index1 >= totalLutSize) {
+        index1 -= totalLutSize;
+    }
 
 	// c010
-	int index2 = (index0 + yOffset);
+	size_t index2 = (index0 + yOffset);
+    if (index2 >= totalLutSize) {
+        index2 -= totalLutSize;
+    }
 
 	// c011
-	int index3 = (index2 + zOffset);
+	size_t index3 = (index2 + xOffset);
+    if (index3 >= totalLutSize) {
+        index3 -= totalLutSize;
+    }
 
 	// c100
-	int index4 = (index0 + xOffset);
+	size_t index4 = (index0 + zOffset);
+    if (index4 >= totalLutSize) {
+        index4 -= totalLutSize;
+    }
 
 	// c101
-	int index5 = (index4 + zOffset);
+	size_t index5 = (index4 + xOffset);
+    if (index5 >= totalLutSize) {
+        index5 -= totalLutSize;
+    }
 
 	// c110
-	int index6 = (index4 + yOffset);
+	size_t index6 = (index4 + yOffset);
+    if (index6 >= totalLutSize) {
+        index6 -= totalLutSize;
+    }
 
 	// c111
-	int index7 = (index6 + zOffset);
+	size_t index7 = (index6 + xOffset);
+    if (index7 >= totalLutSize) {
+        index7 -= totalLutSize;
+    }
 
-	index0 *= 3;
 
-	index1 *= 3;
-	
-	index2 *= 3;
-	
-	index3 *= 3;
-	
-	index4 *= 3;
-	
-	index5 *= 3;
-	
-	index6 *= 3;
-	
-	index7 *= 3;
-
-    float3 c000 = make_float3(lut[index0], lut[index0 + 1], lut[index0 + 2]);
-	float3 c001 = make_float3(lut[index1], lut[index1 + 1], lut[index1 + 2]);
-	float3 c010 = make_float3(lut[index2], lut[index2 + 1], lut[index2 + 2]);
-	float3 c011 = make_float3(lut[index3], lut[index3 + 1], lut[index3 + 2]);
-	float3 c100 = make_float3(lut[index4], lut[index4 + 1], lut[index4 + 2]);
-	float3 c101 = make_float3(lut[index5], lut[index5 + 1], lut[index5 + 2]);
-	float3 c110 = make_float3(lut[index6], lut[index6 + 1], lut[index6 + 2]);
-	float3 c111 = make_float3(lut[index7], lut[index7 + 1], lut[index7 + 2]);
+    float3 c000 = make_float3(static_cast<float>(lut[index0]), static_cast<float>(lut[index0 + 1]), static_cast<float>(lut[index0 + 2]));
+	float3 c001 = make_float3(static_cast<float>(lut[index1]), static_cast<float>(lut[index1 + 1]), static_cast<float>(lut[index1 + 2]));
+	float3 c010 = make_float3(static_cast<float>(lut[index2]), static_cast<float>(lut[index2 + 1]), static_cast<float>(lut[index2 + 2]));
+	float3 c011 = make_float3(static_cast<float>(lut[index3]), static_cast<float>(lut[index3 + 1]), static_cast<float>(lut[index3 + 2]));
+	float3 c100 = make_float3(static_cast<float>(lut[index4]), static_cast<float>(lut[index4 + 1]), static_cast<float>(lut[index4 + 2]));
+	float3 c101 = make_float3(static_cast<float>(lut[index5]), static_cast<float>(lut[index5 + 1]), static_cast<float>(lut[index5 + 2]));
+	float3 c110 = make_float3(static_cast<float>(lut[index6]), static_cast<float>(lut[index6 + 1]), static_cast<float>(lut[index6 + 2]));
+	float3 c111 = make_float3(static_cast<float>(lut[index7]), static_cast<float>(lut[index7 + 1]), static_cast<float>(lut[index7 + 2]));
 
     // c00 -> interpolate c000 and c100
 	float3 c00 = Interpolate(c000, c100, d.x);
@@ -184,24 +194,24 @@ void applyLUTKernel(const uint8_t* input, uint8_t* output, int rows, int cols, c
 
     if (i < rows && j < cols) {
         int index = i * cols + j;
-        int r = input[index * 3 + 2];
+        int r = input[index * 3];
         int g = input[index * 3 + 1];
-        int b = input[index * 3];
+        int b = input[index * 3 + 2];
 
         // Apply the LUT to each pixel
-        uint8_t R = lut[256 * 256 * 3 * r + 256 * 3 * g + 3 * b + 2];
+        uint8_t R = lut[256 * 256 * 3 * r + 256 * 3 * g + 3 * b];
         uint8_t G = lut[256 * 256 * 3 * r + 256 * 3 * g + 3 * b + 1];
-        uint8_t B = lut[256 * 256 * 3 * r + 256 * 3 * g + 3 * b];
+        uint8_t B = lut[256 * 256 * 3 * r + 256 * 3 * g + 3 * b + 2];
 
         // Store the result in the output vector
-        output[index * 3 + 2] = R;
+        output[index * 3] = R;
         output[index * 3 + 1] = G;
-        output[index * 3] = B;
+        output[index * 3 + 2] = B;
     }
 }
 
 // CUDA-accelerated function to apply LUT to the entire frame
-cv::Mat applyLUTtoFrameCUDA(const uint8_t* frame, uint8_t* lut, int lutSize) {
+uint8_t* applyLUTtoFrameCUDA(const uint8_t* frame, uint8_t* lut, int lutSize) {
     // Convert the frame to a vector of pixels
     int totalSize = H_BUFF * W_BUFF * 3;
     uint8_t* output = new uint8_t[totalSize];
@@ -238,8 +248,5 @@ cv::Mat applyLUTtoFrameCUDA(const uint8_t* frame, uint8_t* lut, int lutSize) {
     cudaFree(d_input);
     cudaFree(d_output);
 
-    // Convert the vector of pixels back to a Mat
-    cv::Mat result(H_BUFF, W_BUFF, CV_8UC3, output);
-    delete[] output;
-    return result;
+    return output;
 }

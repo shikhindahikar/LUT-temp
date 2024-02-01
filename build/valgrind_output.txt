@@ -1,0 +1,325 @@
+==15908== Memcheck, a memory error detector
+==15908== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==15908== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==15908== Command: ./test 33 /home/ozsports/LUT/Print+Film+Emulation+LUTs/smallhd_movielooks/SmallHD_MovieLook_BBoyz2.cube
+==15908== 
+LUT size: 33
+LUT file path: /home/ozsports/LUT/Print+Film+Emulation+LUTs/smallhd_movielooks/SmallHD_MovieLook_BBoyz2.cube
+Reading LUT file...
+Interpolating LUT values...
+ffmpeg version N-113212-g42982b5a5d Copyright (c) 2000-2024 the FFmpeg developers
+  built with gcc 9 (Ubuntu 9.4.0-1ubuntu1~20.04.2)
+  configuration: --prefix=/home/ozsports/ffmpeg_build --pkg-config-flags=--static --extra-cflags=-I/home/ozsports/ffmpeg_build/include --extra-ldflags=-L/home/ozsports/ffmpeg_build/lib --extra-libs='-lpthread -lm' --ld=g++ --bindir=/home/ozsports/bin --enable-gpl --enable-gnutls --enable-libaom --enable-libass --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libsvtav1 --enable-libdav1d --enable-libvorbis --enable-libvpx --enable-libx264 --enable-libx265 --enable-nonfree
+  libavutil      58. 36.101 / 58. 36.101
+  libavcodec     60. 37.100 / 60. 37.100
+  libavformat    60. 20.100 / 60. 20.100
+  libavdevice    60.  4.100 / 60.  4.100
+  libavfilter     9. 16.100 /  9. 16.100
+  libswscale      7.  6.100 /  7.  6.100
+  libswresample   4. 13.100 /  4. 13.100
+  libpostproc    57.  4.100 / 57.  4.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/media/ozsports/ozsports/Work/ball_far.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf58.29.100
+  Duration: 00:00:47.02, start: 0.000000, bitrate: 15730 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x1080 [SAR 1:1 DAR 16:9], 15726 kb/s, 59.96 fps, 59.94 tbr, 60k tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+  Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 2 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> rawvideo (native))
+Press [q] to stop, [?] for help
+Output #0, image2pipe, to 'pipe:':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf60.20.100
+  Stream #0:0(und): Video: rawvideo (UYVY / 0x59565955), uyvy422(progressive), 1920x1080 [SAR 1:1 DAR 16:9], q=2-31, 1988667 kb/s, 59.94 fps, 59.94 tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+        encoder         : Lavc60.37.100 rawvideo
+==15908== Warning: noted but unhandled ioctl 0x30000001 with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==15908== Warning: noted but unhandled ioctl 0x4b with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==15908== Warning: noted but unhandled ioctl 0x27 with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==15908== Warning: noted but unhandled ioctl 0x25 with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==15908== Warning: noted but unhandled ioctl 0x17 with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+frame=    2 fps=0.0 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed= 0.1x    ==15908== Warning: set address range perms: large range [0x200000000, 0x300200000) (noaccess)
+==15908== Warning: set address range perms: large range [0x10fac000, 0x30fab000) (noaccess)
+==15908== Warning: noted but unhandled ioctl 0x19 with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==15908== Warning: noted but unhandled ioctl 0x49 with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==15908== Warning: noted but unhandled ioctl 0x21 with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==15908== Warning: noted but unhandled ioctl 0x1b with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+==15908== Warning: noted but unhandled ioctl 0x44 with no size/direction hints.
+==15908==    This could cause spurious value errors to appear.
+==15908==    See README_MISSING_SYSCALL_OR_IOCTL for guidance on writing a proper wrapper.
+frame=    2 fps=2.0 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.05x    frame=    2 fps=1.3 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.0334x    frame=    2 fps=1.0 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.025x    frame=    2 fps=0.8 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.02x    frame=    2 fps=0.7 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.0167x    frame=    2 fps=0.6 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.0143x    frame=    2 fps=0.5 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.0125x    frame=    2 fps=0.4 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.0111x    frame=    2 fps=0.4 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.01x    frame=    2 fps=0.4 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.0091x    ==15908== Invalid read of size 16
+==15908==    at 0x7150C00: icv_l9_owniSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x714FEE6: icv_l9_ippiSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C2703C: cv::CvtColorIPPLoop_Invoker<cv::IPPReorderFunctor>::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4B5B63A: cv::(anonymous namespace)::ParallelLoopBodyWrapper::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B6E85C: cv::ParallelJob::execute(bool) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B71410: cv::parallel_for_pthreads(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B5BA94: cv::parallel_for_(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x6C339B6: bool cv::CvtColorIPPLoopCopy<cv::IPPReorderFunctor>(unsigned char const*, unsigned long, int, unsigned char*, unsigned long, int, int, cv::IPPReorderFunctor const&) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C33F51: cv::hal::cvtBGRtoBGR(unsigned char const*, unsigned long, unsigned char*, unsigned long, int, int, int, int, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C34252: cv::cvtColorBGR2BGR(cv::_InputArray const&, cv::_OutputArray const&, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6BFF62E: cv::cvtColor(cv::_InputArray const&, cv::_OutputArray const&, int, int) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4872872: cvImageWidgetSetImage(_CvImageWidget*, void const*) (in /usr/local/lib/libopencv_highgui.so.4.8.0)
+==15908==  Address 0x1f400040 is 0 bytes inside a block of size 4 free'd
+==15908==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x9001F3F: g_realloc (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F013: ??? (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F6C2: g_string_insert_c (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x86E07E1: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E10ED: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8838: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8E87: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E44DC: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E4464: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E59CC: gtk_css_provider_load_from_file (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E5A8C: gtk_css_provider_load_from_path (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==  Block was alloc'd at
+==15908==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x9001F3F: g_realloc (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F013: ??? (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F076: g_string_sized_new (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x86E10D6: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8838: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8E87: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E44DC: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E4464: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E59CC: gtk_css_provider_load_from_file (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E5A8C: gtk_css_provider_load_from_path (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908== 
+==15908== Invalid read of size 16
+==15908==    at 0x7150C06: icv_l9_owniSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x714FEE6: icv_l9_ippiSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C2703C: cv::CvtColorIPPLoop_Invoker<cv::IPPReorderFunctor>::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4B5B63A: cv::(anonymous namespace)::ParallelLoopBodyWrapper::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B6E85C: cv::ParallelJob::execute(bool) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B71410: cv::parallel_for_pthreads(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B5BA94: cv::parallel_for_(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x6C339B6: bool cv::CvtColorIPPLoopCopy<cv::IPPReorderFunctor>(unsigned char const*, unsigned long, int, unsigned char*, unsigned long, int, int, cv::IPPReorderFunctor const&) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C33F51: cv::hal::cvtBGRtoBGR(unsigned char const*, unsigned long, unsigned char*, unsigned long, int, int, int, int, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C34252: cv::cvtColorBGR2BGR(cv::_InputArray const&, cv::_OutputArray const&, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6BFF62E: cv::cvtColor(cv::_InputArray const&, cv::_OutputArray const&, int, int) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4872872: cvImageWidgetSetImage(_CvImageWidget*, void const*) (in /usr/local/lib/libopencv_highgui.so.4.8.0)
+==15908==  Address 0x1f400050 is 12 bytes after a block of size 4 free'd
+==15908==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x9001F3F: g_realloc (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F013: ??? (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F6C2: g_string_insert_c (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x86E07E1: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E10ED: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8838: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8E87: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E44DC: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E4464: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E59CC: gtk_css_provider_load_from_file (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E5A8C: gtk_css_provider_load_from_path (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==  Block was alloc'd at
+==15908==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x9001F3F: g_realloc (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F013: ??? (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F076: g_string_sized_new (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x86E10D6: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8838: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8E87: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E44DC: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E4464: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E59CC: gtk_css_provider_load_from_file (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E5A8C: gtk_css_provider_load_from_path (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908== 
+==15908== Invalid read of size 16
+==15908==    at 0x7150C17: icv_l9_owniSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x714FEE6: icv_l9_ippiSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C2703C: cv::CvtColorIPPLoop_Invoker<cv::IPPReorderFunctor>::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4B5B63A: cv::(anonymous namespace)::ParallelLoopBodyWrapper::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B6E85C: cv::ParallelJob::execute(bool) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B71410: cv::parallel_for_pthreads(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B5BA94: cv::parallel_for_(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x6C339B6: bool cv::CvtColorIPPLoopCopy<cv::IPPReorderFunctor>(unsigned char const*, unsigned long, int, unsigned char*, unsigned long, int, int, cv::IPPReorderFunctor const&) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C33F51: cv::hal::cvtBGRtoBGR(unsigned char const*, unsigned long, unsigned char*, unsigned long, int, int, int, int, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C34252: cv::cvtColorBGR2BGR(cv::_InputArray const&, cv::_OutputArray const&, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6BFF62E: cv::cvtColor(cv::_InputArray const&, cv::_OutputArray const&, int, int) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4872872: cvImageWidgetSetImage(_CvImageWidget*, void const*) (in /usr/local/lib/libopencv_highgui.so.4.8.0)
+==15908==  Address 0x1f400060 is 16 bytes after a block of size 16 in arena "client"
+==15908== 
+frame=    2 fps=0.3 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.00834x    ==15908== 
+==15908== Process terminating with default action of signal 11 (SIGSEGV)
+==15908==  Access not within mapped region at address 0x1F800000
+==15908==    at 0x7150C00: icv_l9_owniSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x714FEE6: icv_l9_ippiSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C2703C: cv::CvtColorIPPLoop_Invoker<cv::IPPReorderFunctor>::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4B5B63A: cv::(anonymous namespace)::ParallelLoopBodyWrapper::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B6E85C: cv::ParallelJob::execute(bool) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B71410: cv::parallel_for_pthreads(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B5BA94: cv::parallel_for_(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x6C339B6: bool cv::CvtColorIPPLoopCopy<cv::IPPReorderFunctor>(unsigned char const*, unsigned long, int, unsigned char*, unsigned long, int, int, cv::IPPReorderFunctor const&) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C33F51: cv::hal::cvtBGRtoBGR(unsigned char const*, unsigned long, unsigned char*, unsigned long, int, int, int, int, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C34252: cv::cvtColorBGR2BGR(cv::_InputArray const&, cv::_OutputArray const&, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6BFF62E: cv::cvtColor(cv::_InputArray const&, cv::_OutputArray const&, int, int) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4872872: cvImageWidgetSetImage(_CvImageWidget*, void const*) (in /usr/local/lib/libopencv_highgui.so.4.8.0)
+==15908==  If you believe this happened as a result of a stack
+==15908==  overflow in your program's main thread (unlikely but
+==15908==  possible), you can try to increase the size of the
+==15908==  main thread stack using the --main-stacksize= flag.
+==15908==  The main thread stack size used in this run was 8388608.
+==15908== 
+==15908== HEAP SUMMARY:
+==15908==     in use at exit: 92,081,867 bytes in 31,254 blocks
+==15908==   total heap usage: 699,422 allocs, 668,168 frees, 153,337,958 bytes allocated
+==15908== 
+==15908== LEAK SUMMARY:
+==15908==    definitely lost: 0 bytes in 0 blocks
+==15908==    indirectly lost: 0 bytes in 0 blocks
+==15908==      possibly lost: 6,288,396 bytes in 885 blocks
+==15908==    still reachable: 85,709,143 bytes in 29,684 blocks
+==15908==                       of which reachable via heuristic:
+==15908==                         length64           : 4,464 bytes in 72 blocks
+==15908==                         newarray           : 1,968 bytes in 43 blocks
+==15908==         suppressed: 0 bytes in 0 blocks
+==15908== Rerun with --leak-check=full to see details of leaked memory
+==15908== 
+==15908== ERROR SUMMARY: 261681 errors from 3 contexts (suppressed: 0 from 0)
+==15908== 
+==15908== 87224 errors in context 1 of 3:
+==15908== Invalid read of size 16
+==15908==    at 0x7150C06: icv_l9_owniSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x714FEE6: icv_l9_ippiSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C2703C: cv::CvtColorIPPLoop_Invoker<cv::IPPReorderFunctor>::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4B5B63A: cv::(anonymous namespace)::ParallelLoopBodyWrapper::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B6E85C: cv::ParallelJob::execute(bool) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B71410: cv::parallel_for_pthreads(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B5BA94: cv::parallel_for_(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x6C339B6: bool cv::CvtColorIPPLoopCopy<cv::IPPReorderFunctor>(unsigned char const*, unsigned long, int, unsigned char*, unsigned long, int, int, cv::IPPReorderFunctor const&) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C33F51: cv::hal::cvtBGRtoBGR(unsigned char const*, unsigned long, unsigned char*, unsigned long, int, int, int, int, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C34252: cv::cvtColorBGR2BGR(cv::_InputArray const&, cv::_OutputArray const&, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6BFF62E: cv::cvtColor(cv::_InputArray const&, cv::_OutputArray const&, int, int) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4872872: cvImageWidgetSetImage(_CvImageWidget*, void const*) (in /usr/local/lib/libopencv_highgui.so.4.8.0)
+==15908==  Address 0x1f400050 is 12 bytes after a block of size 4 free'd
+==15908==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x9001F3F: g_realloc (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F013: ??? (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F6C2: g_string_insert_c (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x86E07E1: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E10ED: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8838: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8E87: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E44DC: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E4464: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E59CC: gtk_css_provider_load_from_file (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E5A8C: gtk_css_provider_load_from_path (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==  Block was alloc'd at
+==15908==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x9001F3F: g_realloc (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F013: ??? (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F076: g_string_sized_new (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x86E10D6: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8838: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8E87: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E44DC: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E4464: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E59CC: gtk_css_provider_load_from_file (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E5A8C: gtk_css_provider_load_from_path (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908== 
+==15908== 
+==15908== 87228 errors in context 2 of 3:
+==15908== Invalid read of size 16
+==15908==    at 0x7150C17: icv_l9_owniSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x714FEE6: icv_l9_ippiSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C2703C: cv::CvtColorIPPLoop_Invoker<cv::IPPReorderFunctor>::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4B5B63A: cv::(anonymous namespace)::ParallelLoopBodyWrapper::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B6E85C: cv::ParallelJob::execute(bool) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B71410: cv::parallel_for_pthreads(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B5BA94: cv::parallel_for_(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x6C339B6: bool cv::CvtColorIPPLoopCopy<cv::IPPReorderFunctor>(unsigned char const*, unsigned long, int, unsigned char*, unsigned long, int, int, cv::IPPReorderFunctor const&) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C33F51: cv::hal::cvtBGRtoBGR(unsigned char const*, unsigned long, unsigned char*, unsigned long, int, int, int, int, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C34252: cv::cvtColorBGR2BGR(cv::_InputArray const&, cv::_OutputArray const&, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6BFF62E: cv::cvtColor(cv::_InputArray const&, cv::_OutputArray const&, int, int) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4872872: cvImageWidgetSetImage(_CvImageWidget*, void const*) (in /usr/local/lib/libopencv_highgui.so.4.8.0)
+==15908==  Address 0x1f400060 is 16 bytes after a block of size 16 in arena "client"
+==15908== 
+==15908== 
+==15908== 87229 errors in context 3 of 3:
+==15908== Invalid read of size 16
+==15908==    at 0x7150C00: icv_l9_owniSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x714FEE6: icv_l9_ippiSwapChannels_8u_C3R (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C2703C: cv::CvtColorIPPLoop_Invoker<cv::IPPReorderFunctor>::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4B5B63A: cv::(anonymous namespace)::ParallelLoopBodyWrapper::operator()(cv::Range const&) const (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B6E85C: cv::ParallelJob::execute(bool) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B71410: cv::parallel_for_pthreads(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x4B5BA94: cv::parallel_for_(cv::Range const&, cv::ParallelLoopBody const&, double) (in /usr/local/lib/libopencv_core.so.4.8.0)
+==15908==    by 0x6C339B6: bool cv::CvtColorIPPLoopCopy<cv::IPPReorderFunctor>(unsigned char const*, unsigned long, int, unsigned char*, unsigned long, int, int, cv::IPPReorderFunctor const&) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C33F51: cv::hal::cvtBGRtoBGR(unsigned char const*, unsigned long, unsigned char*, unsigned long, int, int, int, int, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6C34252: cv::cvtColorBGR2BGR(cv::_InputArray const&, cv::_OutputArray const&, int, bool) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x6BFF62E: cv::cvtColor(cv::_InputArray const&, cv::_OutputArray const&, int, int) (in /usr/local/lib/libopencv_imgproc.so.4.8.0)
+==15908==    by 0x4872872: cvImageWidgetSetImage(_CvImageWidget*, void const*) (in /usr/local/lib/libopencv_highgui.so.4.8.0)
+==15908==  Address 0x1f400040 is 0 bytes inside a block of size 4 free'd
+==15908==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x9001F3F: g_realloc (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F013: ??? (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F6C2: g_string_insert_c (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x86E07E1: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E10ED: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8838: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8E87: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E44DC: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E4464: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E59CC: gtk_css_provider_load_from_file (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E5A8C: gtk_css_provider_load_from_path (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==  Block was alloc'd at
+==15908==    at 0x483B723: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x483E017: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==15908==    by 0x9001F3F: g_realloc (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F013: ??? (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x901F076: g_string_sized_new (in /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.6)
+==15908==    by 0x86E10D6: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8838: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E8E87: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E44DC: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E4464: ??? (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E59CC: gtk_css_provider_load_from_file (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908==    by 0x86E5A8C: gtk_css_provider_load_from_path (in /usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.16)
+==15908== 
+==15908== ERROR SUMMARY: 261681 errors from 3 contexts (suppressed: 0 from 0)
+frame=    2 fps=0.3 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.0077x    frame=    2 fps=0.3 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.00715x    frame=    2 fps=0.3 q=-0.0 size=    4050kB time=00:00:00.05 bitrate=662889.1kbits/s speed=0.00667x    [vost#0:0/rawvideo @ 0x55cb5a63a8c0] Error submitting a packet to the muxer: Broken pipe
+    Last message repeated 1 times
+[out#0/image2pipe @ 0x55cb5a66cb80] Error muxing a packet
+[out#0/image2pipe @ 0x55cb5a66cb80] Task finished with error code: -32 (Broken pipe)
+[out#0/image2pipe @ 0x55cb5a66cb80] Terminating thread with return code -32 (Broken pipe)
+[out#0/image2pipe @ 0x55cb5a66cb80] Error writing trailer: Broken pipe
+[out#0/image2pipe @ 0x55cb5a66cb80] Error closing file: Broken pipe
+[out#0/image2pipe @ 0x55cb5a66cb80] video:8100kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+frame=    2 fps=0.3 q=-0.0 Lsize=    4114kB time=00:00:00.05 bitrate=673364.4kbits/s speed=0.00654x    
+Conversion failed!
