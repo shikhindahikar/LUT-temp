@@ -53,9 +53,9 @@ float3 trilinearInterpolation(float3 pos, float* lut, const size_t lutSize, uint
 	// y changes second fastest and represents a row in the cube. Add the lut size (the size of one dimension) when it is set
 	// z changes the slowest and represents the plane in the cube. Add the square of the lut size when it is set
 
-	size_t xOffset = lutSize * lutSize * 3;
+	size_t xOffset = 1 * 3;
 	size_t yOffset = lutSize * 3;
-	size_t zOffset = 1 * 3;
+	size_t zOffset = lutSize * lutSize * 3;
 
     // To prevent the out of bounds, we will start the index from 0 + difference again whenever an index is out of bounds
     
@@ -64,7 +64,7 @@ float3 trilinearInterpolation(float3 pos, float* lut, const size_t lutSize, uint
 	size_t index0 = (intZ * zOffset + intY * yOffset + intX * xOffset);
 
 	// c001
-	size_t index1 = (index0 + xOffset);
+	size_t index1 = (index0 + zOffset);
     if (index1 >= totalLutSize) {
         index1 -= totalLutSize;
     }
@@ -76,19 +76,19 @@ float3 trilinearInterpolation(float3 pos, float* lut, const size_t lutSize, uint
     }
 
 	// c011
-	size_t index3 = (index2 + xOffset);
+	size_t index3 = (index2 + zOffset);
     if (index3 >= totalLutSize) {
         index3 -= totalLutSize;
     }
 
 	// c100
-	size_t index4 = (index0 + zOffset);
+	size_t index4 = (index0 + xOffset);
     if (index4 >= totalLutSize) {
         index4 -= totalLutSize;
     }
 
 	// c101
-	size_t index5 = (index4 + xOffset);
+	size_t index5 = (index4 + zOffset);
     if (index5 >= totalLutSize) {
         index5 -= totalLutSize;
     }
@@ -100,7 +100,7 @@ float3 trilinearInterpolation(float3 pos, float* lut, const size_t lutSize, uint
     }
 
 	// c111
-	size_t index7 = (index6 + xOffset);
+	size_t index7 = (index6 + zOffset);
     if (index7 >= totalLutSize) {
         index7 -= totalLutSize;
     }
@@ -204,9 +204,9 @@ void applyLUTKernel(const uint8_t* input, uint8_t* output, int rows, int cols, c
         uint8_t B = lut[256 * 256 * 3 * r + 256 * 3 * g + 3 * b + 2];
 
         // Store the result in the output vector
-        output[index * 3] = R;
+        output[index * 3 + 2] = R;
         output[index * 3 + 1] = G;
-        output[index * 3 + 2] = B;
+        output[index * 3] = B;
     }
 }
 

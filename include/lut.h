@@ -6,8 +6,8 @@
 #include <opencv2/cudaarithm.hpp>
 #include "NvInfer.h"
 
-#define H_BUFF 1080
-#define W_BUFF 1920
+#define H_BUFF 2160
+#define W_BUFF 3840
 
 struct delta {
     float x;

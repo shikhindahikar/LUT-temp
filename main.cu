@@ -8,7 +8,7 @@
 
 int main(int argc, char* argv[]) {
     // Specify the input video file and the output directory
-    std::string inputVideoFile = "/media/ozsports/ozsports/Work/ball_far.mp4";
+    std::string inputVideoFile = "/home/ozsports/Downloads/pexels_videos_1409899.mp4";
 
     // Specify the size of the LUT and path to the .cube file
     if (argc != 3) {
