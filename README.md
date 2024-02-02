@@ -6,6 +6,8 @@ Later on we can apply the LUT transorms very quickly to any frame. For this exam
 We can skip the part where I am getting the video in uyvy colour space and instead put `-pix_fmt rgb24` for direct RGB colour spaces.
 Doing this you will not have to convert uyvy to RGB later on in the code.
 
+Used [this](https://github.com/Ppkturner/3DLutInterpolation/blob/master/LutInterpolation/Trilinear.cpp) repo code for trilinear interpolation algorithm
+
 ## Dependencies
 
 - FFMPEG
@@ -23,7 +25,7 @@ Doing this you will not have to convert uyvy to RGB later on in the code.
 - Create a build directory inside the source and run following commands in that build directory:
   
   `cmake ..`
-  
+
   `make`
 - To run use the following commands:
   `./lut <size of the LUT> /path/to/the/cube/file`
