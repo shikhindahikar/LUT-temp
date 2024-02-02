@@ -21,7 +21,9 @@ Doing this you will not have to convert uyvy to RGB later on in the code.
 ## Building and Running
 
 - Create a build directory inside the source and run following commands in that build directory:
+  
   `cmake ..`
+  
   `make`
 - To run use the following commands:
   `./lut <size of the LUT> /path/to/the/cube/file`
