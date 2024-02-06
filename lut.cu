@@ -188,64 +188,52 @@ void getLutValues(std::string filename, int lutSize, float* values) {
 
 // CUDA kernel to apply LUT to each pixel in parallel
 __global__
-void applyLUTKernel(const uint8_t* input, uint8_t* output, int rows, int cols, const uint8_t* lut) {
-    int i = blockIdx.y * blockDim.y + threadIdx.y;
-    int j = blockIdx.x * blockDim.x + threadIdx.x;
+void applyLUTKernel(const uint8_t* input, uint8_t* output, int frameSize, const uint8_t* lut) {
+    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    int stride = blockDim.x * gridDim.x;
+    frameSize >>= 1;
+    for(int i = index; i < frameSize; i += stride) {
+        uint8_t U = input[i * 4];
+        uint8_t Y1 = input[i * 4 + 1];
+        uint8_t V = input[i * 4 + 2];
+        uint8_t Y2 = input[i * 4 + 3];
 
-    if (i < rows && j < cols) {
-        int index = i * cols + j;
-        int r = input[index * 3];
-        int g = input[index * 3 + 1];
-        int b = input[index * 3 + 2];
-
-        // Apply the LUT to each pixel
-        uint8_t R = lut[256 * 256 * 3 * r + 256 * 3 * g + 3 * b];
-        uint8_t G = lut[256 * 256 * 3 * r + 256 * 3 * g + 3 * b + 1];
-        uint8_t B = lut[256 * 256 * 3 * r + 256 * 3 * g + 3 * b + 2];
-
-        // Store the result in the output vector
-        output[index * 3 + 2] = R;
-        output[index * 3 + 1] = G;
-        output[index * 3] = B;
+        output[i * 4] = lut[256 * 256 * 2 * U + 256 * (Y1 + Y2) + 2 * V];
+        output[i * 4 + 1] = lut[256 * 256 * 2 * U + 256 * (Y1 + Y2) + 2 * V + 1];
+        output[i * 4 + 2] = lut[256 * 256 * 2 * U + 256 * (Y1 + Y2) + 2 * V + 2];
+        output[i * 4 + 3] = lut[256 * 256 * 2 * U + 256 * (Y1 + Y2) + 2 * V + 3];
     }
 }
 
 // CUDA-accelerated function to apply LUT to the entire frame
 uint8_t* applyLUTtoFrameCUDA(const uint8_t* frame, uint8_t* lut, int lutSize) {
     // Convert the frame to a vector of pixels
-    int totalSize = H_BUFF * W_BUFF * 3;
+    int totalSize = H_BUFF * W_BUFF * 2;
     uint8_t* output = new uint8_t[totalSize];
 
     // Allocate GPU memory
-    uint8_t* d_input;
     uint8_t* d_output;
-    cudaMalloc(&d_input, totalSize * sizeof(uint8_t));
     cudaMalloc(&d_output, totalSize * sizeof(uint8_t));
 
     // Copy data to GPU
-    cudaMemcpy(d_input, frame, totalSize * sizeof(uint8_t), cudaMemcpyHostToDevice);
     cudaMemcpy(d_output, output, totalSize * sizeof(uint8_t), cudaMemcpyHostToDevice);
 
-    // Calculate block and grid dimensions for the kernel
-    dim3 blockSize(16, 16);
-    dim3 gridSize((H_BUFF + blockSize.x - 1) / blockSize.x, (W_BUFF + blockSize.y - 1) / blockSize.y);
-
-    // Launch the kernel
-    applyLUTKernel<<<gridSize, blockSize>>>(d_input, d_output, W_BUFF, H_BUFF, lut);
+    // Launch the kernel to apply UYVY LUT to each pixel in UYVY frame
+    applyLUTKernel<<<960, 256>>>(frame, d_output, W_BUFF * H_BUFF, lut);
 
     cudaDeviceSynchronize();
 
     // check for errors
     cudaError_t error = cudaGetLastError();
     if (error != cudaSuccess) {
-        fprintf(stderr, "ERROR: %s \n", cudaGetErrorString(error));
+        fprintf(stderr, "ERROR @ applying LUT: %s \n", cudaGetErrorString(error));
+        exit(EXIT_FAILURE);
     }
 
     // Copy the result back to CPU
     cudaMemcpy(output, d_output, totalSize * sizeof(uint8_t), cudaMemcpyDeviceToHost);
 
     // Free GPU memory
-    cudaFree(d_input);
     cudaFree(d_output);
 
     return output;

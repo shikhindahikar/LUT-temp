@@ -8,7 +8,7 @@
 
 int main(int argc, char* argv[]) {
     // Specify the input video file and the output directory
-    std::string inputVideoFile = "/path/to/your/video.mp4";
+    std::string inputVideoFile = "/media/ozsports/ozsports/Work/ball_far.mp4";
 
     // Specify the size of the LUT and path to the .cube file
     if (argc != 3) {
@@ -48,10 +48,27 @@ int main(int argc, char* argv[]) {
     // free memory
     delete[] lutValues;
 
-    // put lutValues into device memory
-    uint8_t* d_lutValues;
-    cudaMalloc((void**)&d_lutValues, 256 * 256 * 256 * 3 * sizeof(uint8_t));
-    cudaMemcpy(d_lutValues, interpolatedLUTValues, 256 * 256 * 256 * 3 * sizeof(uint8_t), cudaMemcpyHostToDevice);
+    
+    uint8_t* d_interpolatedLUTValues;
+    cudaMalloc((void**)&d_interpolatedLUTValues, 256 * 256 * 256 * 3 * sizeof(uint8_t));
+    cudaMemcpy(d_interpolatedLUTValues, interpolatedLUTValues, 256 * 256 * 256 * 3 * sizeof(uint8_t), cudaMemcpyHostToDevice);
+    delete[] interpolatedLUTValues;
+
+    // allocate memory for the LUT values converted to UYVY
+    uint8_t* d_lutUYVY;
+    cudaMalloc((void**)&d_lutUYVY, 256 * 256 * 256 * 2 * sizeof(uint8_t));
+
+    // converting the interpolated RGB LUT to UYVY LUT on CUDA
+    cudargblut2uyvy<<<960, 256>>>(256 * 256 * 256, d_interpolatedLUTValues, d_lutUYVY);
+
+    // check for errors
+    cudaError_t error = cudaGetLastError();
+    if (error != cudaSuccess) {
+        fprintf(stderr, "ERROR @ RGB LUT 2 UYVY: %s \n", cudaGetErrorString(error));
+        exit(EXIT_FAILURE);
+    }
+
+    cudaFree(d_interpolatedLUTValues);
 
     std::string ffmpeg_path = "ffmpeg";
 
@@ -66,31 +83,42 @@ int main(int argc, char* argv[]) {
 	// Run inference on each frame till EOF
 	while (fread(raw_image, H_BUFF * W_BUFF * 2, 1, pipe) == 1) {
         // put raw_image into uint8_t* frame
-        uint8_t* frame = (uint8_t*)malloc(H_BUFF * W_BUFF * 3 * sizeof(uint8_t));
+        uint8_t* frame = new uint8_t[H_BUFF * W_BUFF * 3];
         uint8_t* raw_video_data = (uint8_t*)raw_image;
-        uint8_t* out_frame = (uint8_t*)malloc(H_BUFF * W_BUFF * 3 * sizeof(uint8_t));
+        
         // put frame into device memory
         uint8_t* d_frame;
         cudaMalloc((void**)&d_frame, H_BUFF * W_BUFF * 2 * sizeof(uint8_t));
         cudaMemcpy(d_frame, raw_video_data, H_BUFF * W_BUFF * 2 * sizeof(uint8_t), cudaMemcpyHostToDevice);
 
+        // apply LUTs
+        uint8_t* final_frame = applyLUTtoFrameCUDA(d_frame, d_lutUYVY, LUT_SIZE);
+        cudaFree(d_frame);
+
+        // put final frame into device memory for converting UYVY to RGB
+        uint8_t* d_in_frame;
+        cudaMalloc((void**)&d_in_frame, H_BUFF * W_BUFF * 2 * sizeof(uint8_t));
+        cudaMemcpy(d_in_frame, final_frame, H_BUFF * W_BUFF * 2 * sizeof(uint8_t), cudaMemcpyHostToDevice);
+        delete[] final_frame;
+
         // put out frame into device memory
         uint8_t* d_out_frame;
         cudaMalloc((void**)&d_out_frame, H_BUFF * W_BUFF * 3 * sizeof(uint8_t));
-        cudaMemcpy(d_out_frame, out_frame, H_BUFF * W_BUFF * 3 * sizeof(uint8_t), cudaMemcpyHostToDevice);
-        free(out_frame);
-        
-        cudauyvy2rgb<<<960, 256>>>(H_BUFF * W_BUFF, d_frame, d_out_frame);
-        cudaFree(d_frame);
+
+        cudauyvy2rgb<<<960, 256>>>(H_BUFF * W_BUFF, d_in_frame, d_out_frame);
+        cudaFree(d_in_frame);
+
+        error = cudaGetLastError();
+        if (error != cudaSuccess) {
+            fprintf(stderr, "ERROR @ UYVY 2 RGB: %s \n", cudaGetErrorString(error));
+            exit(EXIT_FAILURE);
+        }
         
         // copy out_frame from device to host
         cudaMemcpy(frame, d_out_frame, H_BUFF * W_BUFF * 3 * sizeof(uint8_t), cudaMemcpyDeviceToHost);
         cudaFree(d_out_frame);
 
-        // apply LUTs
-        uint8_t* final_frame = applyLUTtoFrameCUDA(frame, d_lutValues, LUT_SIZE);
-        cv::Mat frame_mat(H_BUFF, W_BUFF, CV_8UC3, final_frame);
-        delete[] final_frame;
+        cv::Mat frame_mat(H_BUFF, W_BUFF, CV_8UC3, frame);
         
         // Display the input frame
         cv::imshow("Video", frame_mat);
@@ -99,14 +127,13 @@ int main(int argc, char* argv[]) {
         }
 
         // free memory
-        free(frame);
+        delete[] frame;
         frame_mat.release();
     }
 
     // free memory
     free(raw_image);
-    delete[] interpolatedLUTValues;
-    cudaFree(d_lutValues);
+    cudaFree(d_lutUYVY);
     pclose(pipe);
 
     // Close all windows
