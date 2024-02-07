@@ -46,12 +46,10 @@ __global__ void cudargblut2uyvy(int totalLutSize, uint8_t *interpVals, uint8_t *
 	int stride = blockDim.x * gridDim.x;
 	totalLutSize >>= 1;
 	for(int i = index; i < totalLutSize; i += stride) {
+		// For first pixel in the pair
 		float red = interpVals[i * 6];
 		float green = interpVals[i * 6 + 1];
 		float blue = interpVals[i * 6 + 2];
-		//		float red = (i < 1000000) ? 255 : 0;
-		//		float green = (i > 1000000 && i < 2000000) ? 255 : 0;
-		//		float blue = (i > 2000000) ? 255 : 0;
 		float y = 16 + 0.256 * red // Red
 			+ 0.504 * green // Green
 			+ 0.0979 * blue; // Blue
@@ -65,13 +63,10 @@ __global__ void cudargblut2uyvy(int totalLutSize, uint8_t *interpVals, uint8_t *
 		uyvyLut[(i << 2)] = u;
 		uyvyLut[(i << 2) + 1] = y;
 		uyvyLut[(i << 2) + 2] = v;
+		// For second pixel in the pair
 		red = interpVals[i * 6 + 3];
 		green = interpVals[i * 6 + 4];
 		blue = interpVals[i * 6 + 5];
-		//		red = (i < 1000000) ? 255 : 0;
-		//		green = (i > 1000000 && i < 2000000) ? 255 : 0;
-		//		blue = (i > 2000000) ? 255 : 0;
-
 		y = 16 + 0.256 * red // Red
 			+ 0.504 * green // Green
 			+ 0.0979 * blue; // Blue
