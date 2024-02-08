@@ -193,20 +193,35 @@ void applyLUTKernel(const uint8_t* input, uint8_t* output, int frameSize, const 
     int stride = blockDim.x * gridDim.x;
     frameSize >>= 1;
     for(int i = index; i < frameSize; i += stride) {
-        uint8_t U = input[i * 4];
-        uint8_t Y1 = input[i * 4 + 1];
-        uint8_t V = input[i * 4 + 2];
-        uint8_t Y2 = input[i * 4 + 3];
+        // UYV values from UYVY frame
+        uint8_t U = input[(i << 2)];
+        uint8_t Y1 = input[(i << 2) + 1];
+        uint8_t V = input[(i << 2) + 2];
+        uint8_t Y2 = input[(i << 2) + 3];
 
-        output[i * 4] = lut[256 * 256 * 2 * U + 256 * (Y1 + Y2) + 2 * V];
-        output[i * 4 + 1] = lut[256 * 256 * 2 * U + 256 * (Y1 + Y2) + 2 * V + 1];
-        output[i * 4 + 2] = lut[256 * 256 * 2 * U + 256 * (Y1 + Y2) + 2 * V + 2];
-        output[i * 4 + 3] = lut[256 * 256 * 2 * U + 256 * (Y1 + Y2) + 2 * V + 3];
+        // uint8_t pixel1U = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V];
+        // uint8_t pixel1Y = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 1];
+        // uint8_t pixel1V = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 2];
+
+        // uint8_t pixel2U = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V];
+        // uint8_t pixel2Y = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V + 1];
+        // uint8_t pixel2V = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V + 2];
+
+        // getting corresponding LUT[U1][Y1][V1] values to put back into the frame
+        // output[(i << 2)] = (pixel1U + pixel2U) >> 1;
+        // output[(i << 2) + 1] = pixel1Y;
+        // output[(i << 2) + 2] = (pixel1V + pixel2V) >> 1;
+        // output[(i << 2) + 3] = pixel2Y;
+        
+        output[(i << 2)] = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V];
+        output[(i << 2) + 1] = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 1];
+        output[(i << 2) + 2] = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 2];
+        output[(i << 2) + 3] = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V + 1];
     }
 }
 
 // CUDA-accelerated function to apply LUT to the entire frame
-uint8_t* applyLUTtoFrameCUDA(const uint8_t* frame, uint8_t* lut, int lutSize) {
+uint8_t* applyLUTtoFrameCUDA(const uint8_t* frame, uint8_t* lut) {
     // Convert the frame to a vector of pixels
     int totalSize = H_BUFF * W_BUFF * 2;
     uint8_t* output = new uint8_t[totalSize];

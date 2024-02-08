@@ -56,10 +56,10 @@ int main(int argc, char* argv[]) {
 
     // allocate memory for the LUT values converted to UYVY
     uint8_t* d_lutUYVY;
-    cudaMalloc((void**)&d_lutUYVY, 256 * 256 * 256 * 2 * sizeof(uint8_t));
+    cudaMalloc((void**)&d_lutUYVY, 256 * 256 * 256 * 3 * sizeof(uint8_t));
 
     // converting the interpolated RGB LUT to UYVY LUT on CUDA
-    cudargblut2uyvy<<<960, 256>>>(256 * 256 * 256, d_interpolatedLUTValues, d_lutUYVY);
+    cudargb2yuv<<<960, 256>>>(256 * 256 * 256, d_interpolatedLUTValues, d_lutUYVY);
 
     // check for errors
     cudaError_t error = cudaGetLastError();
@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
         cudaMemcpy(d_frame, raw_video_data, H_BUFF * W_BUFF * 2 * sizeof(uint8_t), cudaMemcpyHostToDevice);
 
         // apply LUTs
-        uint8_t* final_frame = applyLUTtoFrameCUDA(d_frame, d_lutUYVY, LUT_SIZE);
+        uint8_t* final_frame = applyLUTtoFrameCUDA(d_frame, d_lutUYVY);
         cudaFree(d_frame);
 
         // put final frame into device memory for converting UYVY to RGB
@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
         uint8_t* d_out_frame;
         cudaMalloc((void**)&d_out_frame, H_BUFF * W_BUFF * 3 * sizeof(uint8_t));
 
-        cudauyvy2rgb<<<960, 256>>>(H_BUFF * W_BUFF, d_in_frame, d_out_frame);
+        cudauyvy2bgr<<<960, 256>>>(H_BUFF * W_BUFF, d_in_frame, d_out_frame);
         cudaFree(d_in_frame);
 
         error = cudaGetLastError();

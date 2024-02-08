@@ -25,4 +25,4 @@ void getLutValues(std::string filename, int lutSize, float* values);
 
 __global__ void applyLUTKernel(const uint8_t* input, uint8_t* output, int frameSize, const uint8_t* lut);
 
-uint8_t* applyLUTtoFrameCUDA(const uint8_t* frame, uint8_t* lut, int lutSize);
+uint8_t* applyLUTtoFrameCUDA(const uint8_t* frame, uint8_t* lut);
