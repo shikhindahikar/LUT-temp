@@ -58,8 +58,10 @@ int main(int argc, char* argv[]) {
     uint8_t* d_lutUYVY;
     cudaMalloc((void**)&d_lutUYVY, 256 * 256 * 256 * 3 * sizeof(uint8_t));
 
+    dim3 block(8, 8, 8);
+    dim3 grid((256 - 1 + block.x) / block.x, (256 - 1 + block.y) / block.y, (256 - 1 + block.z) / block.z);
     // converting the interpolated RGB LUT to UYVY LUT on CUDA
-    cudargb2yuv<<<960, 256>>>(256 * 256 * 256, d_interpolatedLUTValues, d_lutUYVY);
+    cudargblut2yuv<<<grid, block>>>(256 * 256 * 256, d_interpolatedLUTValues, d_lutUYVY);
 
     // check for errors
     cudaError_t error = cudaGetLastError();

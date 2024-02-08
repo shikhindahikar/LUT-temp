@@ -41,14 +41,15 @@ __global__ void cudauyvy2bgr(int framesize, uint8_t *input, uint8_t *output) {
 	}
 }
 
-__global__ void cudargb2yuv(int framesize, uint8_t *input, uint8_t *output) {
-	int index = blockIdx.x * blockDim.x + threadIdx.x;
-	int stride = blockDim.x * gridDim.x;
-	framesize >>= 1;
-	for(int i = index; i < framesize; i += stride) {
-		float red = input[i*3 + 2];
-		float green = input[i*3 + 1];
-		float blue = input[i*3 + 0];
+__global__ void cudargblut2yuv(int framesize, uint8_t *input, uint8_t *output) {
+	int idx = blockIdx.x * blockDim.x + threadIdx.x;
+	int idy = blockIdx.y * blockDim.y + threadIdx.y;
+	int idz = blockIdx.z * blockDim.z + threadIdx.z;
+	if (idx < 256 && idy < 256 && idz < 256) {
+		int index = idx * 256 * 256 * 3 + idy * 256 * 3 + idz * 3;
+		float red = input[index];
+		float green = input[index + 1];
+		float blue = input[index + 2];
 		float y = 16 + 0.256 * red // Red
 			+ 0.504 * green // Green
 			+ 0.0979 * blue; // Blue
@@ -60,9 +61,9 @@ __global__ void cudargb2yuv(int framesize, uint8_t *input, uint8_t *output) {
 		float u = 128 + 0.439 * red - 0.368 * green - 0.0714 * blue;
 		if(u < 0) u = 0;
 		else if(u > 255) u = 255;
-		output[i * 3] = u;
-		output[i * 3 + 1] = y;
-		output[i * 3 + 2] = v;
+		output[index] = u;
+		output[index + 1] = y;
+		output[index + 2] = v;
 	}
 }
 
