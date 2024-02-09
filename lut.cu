@@ -199,24 +199,26 @@ void applyLUTKernel(const uint8_t* input, uint8_t* output, int frameSize, const 
         uint8_t V = input[(i << 2) + 2];
         uint8_t Y2 = input[(i << 2) + 3];
 
-        // uint8_t pixel1U = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V];
-        // uint8_t pixel1Y = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 1];
-        // uint8_t pixel1V = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 2];
+        uint8_t pixel1U = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V];
+        uint8_t pixel1Y = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 1];
+        uint8_t pixel1V = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 2];
 
-        // uint8_t pixel2U = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V];
-        // uint8_t pixel2Y = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V + 1];
-        // uint8_t pixel2V = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V + 2];
+        uint8_t pixel2U = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V];
+        uint8_t pixel2Y = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V + 1];
+        uint8_t pixel2V = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V + 2];
+
+        // if (pixel1Y != pixel2Y) {
+        //     printf("------------------------------------------------------------------------------------\n");
+        //     printf("pixel1U: %d, pixel1V: %d, pixel2U: %d, pixel2V: %d\n", pixel1U, pixel1V, pixel2U, pixel2V);
+        //     printf("------------------------------------------------------------------------------------\n");
+        // }
 
         // getting corresponding LUT[U1][Y1][V1] values to put back into the frame
-        // output[(i << 2)] = (pixel1U + pixel2U) >> 1;
-        // output[(i << 2) + 1] = pixel1Y;
-        // output[(i << 2) + 2] = (pixel1V + pixel2V) >> 1;
-        // output[(i << 2) + 3] = pixel2Y;
-        
-        output[(i << 2)] = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V];
-        output[(i << 2) + 1] = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 1];
-        output[(i << 2) + 2] = lut[256 * 256 * 3 * U + 256 * 3 * Y1 + 3 * V + 2];
-        output[(i << 2) + 3] = lut[256 * 256 * 3 * U + 256 * 3 * Y2 + 3 * V + 1];
+        output[(i << 2)] = (pixel1U + pixel2U) >> 1;
+        output[(i << 2) + 1] = pixel1Y; 
+        output[(i << 2) + 2] = (pixel1V + pixel2V) >> 1;
+        output[(i << 2) + 3] = pixel2Y;
+
     }
 }
 

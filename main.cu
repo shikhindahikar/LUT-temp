@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
     dim3 block(8, 8, 8);
     dim3 grid((256 - 1 + block.x) / block.x, (256 - 1 + block.y) / block.y, (256 - 1 + block.z) / block.z);
     // converting the interpolated RGB LUT to UYVY LUT on CUDA
-    cudargblut2yuv<<<grid, block>>>(256 * 256 * 256, d_interpolatedLUTValues, d_lutUYVY);
+    cudargblut2yuv<<<grid, block>>>(d_interpolatedLUTValues, d_lutUYVY);
 
     // check for errors
     cudaError_t error = cudaGetLastError();
