@@ -55,18 +55,23 @@ int main(int argc, char* argv[]) {
     delete[] interpolatedLUTValues;
 
     // get all possible mappings from RGB to YUV values
-    uint8_t* d_yuv2rgb;
-    cudaMalloc((void**)&d_yuv2rgb, 256 * 256 * 256 * 3 * sizeof(uint8_t));
+    uint8_t* d_rgb2yuv;
+    cudaMalloc((void**)&d_rgb2yuv, 256 * 256 * 256 * 3 * sizeof(uint8_t));
     dim3 block(8, 8, 8);
     dim3 grid((256 - 1 + block.x) / block.x, (256 - 1 + block.y) / block.y, (256 - 1 + block.z) / block.z);
-    cudargbIdx2yuv<<<grid, block>>>(d_yuv2rgb);
+    cudargbIdx2yuv<<<grid, block>>>(d_rgb2yuv);
+
+    // uint8_t* d_yuv2rgb;
+    // cudaMalloc((void**)&d_yuv2rgb, 256 * 256 * 256 * 3 * sizeof(uint8_t));
+    // cudayuvIdx2rgb<<<grid, block>>>(d_yuv2rgb);
+
 
     // allocate memory for the LUT values converted to UYVY
     uint8_t* d_lutYUV;
     cudaMalloc((void**)&d_lutYUV, 256 * 256 * 256 * 3 * sizeof(uint8_t));
 
     // converting the interpolated RGB LUT to YUV LUT on CUDA
-    cudargblut2yuv<<<grid, block>>>(d_interpolatedLUTValues, d_lutYUV, d_yuv2rgb);
+    cudargblut2yuv<<<grid, block>>>(d_interpolatedLUTValues, d_lutYUV, d_rgb2yuv);
 
     // check for errors
     cudaError_t error = cudaGetLastError();
@@ -76,7 +81,8 @@ int main(int argc, char* argv[]) {
     }
 
     cudaFree(d_interpolatedLUTValues);
-    cudaFree(d_yuv2rgb);
+    cudaFree(d_rgb2yuv);
+    // cudaFree(d_yuv2rgb);
 
     std::string ffmpeg_path = "ffmpeg";
 
