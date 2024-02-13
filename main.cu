@@ -54,14 +54,19 @@ int main(int argc, char* argv[]) {
     cudaMemcpy(d_interpolatedLUTValues, interpolatedLUTValues, 256 * 256 * 256 * 3 * sizeof(uint8_t), cudaMemcpyHostToDevice);
     delete[] interpolatedLUTValues;
 
-    // allocate memory for the LUT values converted to UYVY
-    uint8_t* d_lutUYVY;
-    cudaMalloc((void**)&d_lutUYVY, 256 * 256 * 256 * 3 * sizeof(uint8_t));
-
+    // get all possible mappings from RGB to YUV values
+    uint8_t* d_yuv2rgb;
+    cudaMalloc((void**)&d_yuv2rgb, 256 * 256 * 256 * 3 * sizeof(uint8_t));
     dim3 block(8, 8, 8);
     dim3 grid((256 - 1 + block.x) / block.x, (256 - 1 + block.y) / block.y, (256 - 1 + block.z) / block.z);
-    // converting the interpolated RGB LUT to UYVY LUT on CUDA
-    cudargblut2yuv<<<grid, block>>>(d_interpolatedLUTValues, d_lutUYVY);
+    cudargbIdx2yuv<<<grid, block>>>(d_yuv2rgb);
+
+    // allocate memory for the LUT values converted to UYVY
+    uint8_t* d_lutYUV;
+    cudaMalloc((void**)&d_lutYUV, 256 * 256 * 256 * 3 * sizeof(uint8_t));
+
+    // converting the interpolated RGB LUT to YUV LUT on CUDA
+    cudargblut2yuv<<<grid, block>>>(d_interpolatedLUTValues, d_lutYUV, d_yuv2rgb);
 
     // check for errors
     cudaError_t error = cudaGetLastError();
@@ -71,6 +76,7 @@ int main(int argc, char* argv[]) {
     }
 
     cudaFree(d_interpolatedLUTValues);
+    cudaFree(d_yuv2rgb);
 
     std::string ffmpeg_path = "ffmpeg";
 
@@ -94,7 +100,7 @@ int main(int argc, char* argv[]) {
         cudaMemcpy(d_frame, raw_video_data, H_BUFF * W_BUFF * 2 * sizeof(uint8_t), cudaMemcpyHostToDevice);
 
         // apply LUTs
-        uint8_t* final_frame = applyLUTtoFrameCUDA(d_frame, d_lutUYVY);
+        uint8_t* final_frame = applyLUTtoFrameCUDA(d_frame, d_lutYUV);
         cudaFree(d_frame);
 
         // put final frame into device memory for converting UYVY to RGB
@@ -135,7 +141,7 @@ int main(int argc, char* argv[]) {
 
     // free memory
     free(raw_image);
-    cudaFree(d_lutUYVY);
+    cudaFree(d_lutYUV);
     pclose(pipe);
 
     // Close all windows

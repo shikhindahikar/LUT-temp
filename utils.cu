@@ -41,15 +41,48 @@ __global__ void cudauyvy2bgr(int framesize, uint8_t *input, uint8_t *output) {
 	}
 }
 
-__global__ void cudargblut2yuv(uint8_t *input, uint8_t *output) {
+__global__ void cudargblut2yuv(uint8_t *inputlut, uint8_t *outputlut, uint8_t* rgbIdx2yuvLut) {
 	int idx = blockIdx.x * blockDim.x + threadIdx.x;
 	int idy = blockIdx.y * blockDim.y + threadIdx.y;
 	int idz = blockIdx.z * blockDim.z + threadIdx.z;
 	if (idx < 256 && idy < 256 && idz < 256) {
+		// index is the RGB value of a pixel we are trying to transform and resultant is the colour corrected RGB value
 		int index = idx * 256 * 256 * 3 + idy * 256 * 3 + idz * 3;
-		float red = input[index];
-		float green = input[index + 1];
-		float blue = input[index + 2];
+		uint8_t red = inputlut[index + 0];
+		uint8_t green = inputlut[index + 1];
+		uint8_t blue = inputlut[index + 2];
+		
+		// RGB index for getting the corresponding YUV values for the resultant LUT RGB values
+		int rgbIndex = 256 * 256 * 3 * red + 256 * 3 * green + 3 * blue;
+		
+		float y = rgbIdx2yuvLut[rgbIndex + 0];
+		float u = rgbIdx2yuvLut[rgbIndex + 1];
+		float v = rgbIdx2yuvLut[rgbIndex + 2];
+
+		// now getting the appropriate YUV indexes for the colour corrected YUV values which we just fetched
+		int yuvIdx = rgbIdx2yuvLut[index + 0] * 256 * 256 * 3 + rgbIdx2yuvLut[index + 1] * 256 * 3 + rgbIdx2yuvLut[index + 2] * 3;
+
+		
+		// use the cudayuvlut2rgb function to get the proper indexing
+		outputlut[yuvIdx] = y;
+		outputlut[yuvIdx + 1] = u;
+		outputlut[yuvIdx + 2] = v;
+	}
+}
+
+// Creating an RGB to YUV LUT with all possible values of RGB 0 to 255
+__global__ void cudargbIdx2yuv(uint8_t* output) {
+	int idx = blockIdx.x * blockDim.x + threadIdx.x;
+	int idy = blockIdx.y * blockDim.y + threadIdx.y;
+	int idz = blockIdx.z * blockDim.z + threadIdx.z;
+	if (idx < 256 && idy < 256 && idz < 256) {
+
+		int index = idx * 256 * 256 * 3 + idy * 256 * 3 + idz * 3;
+		uint8_t red = idx;
+		uint8_t green = idy;
+		uint8_t blue = idz;
+
+		// red, green, blue are the indexes which give the corresponding YUV values
 		float y = 16 + 0.256 * red + 0.504 * green + 0.0979 * blue;
 		float u = 128 + 0.439 * red - 0.368 * green - 0.0714 * blue;
 		float v = 128 - 0.148 * red  - 0.291 * green + 0.439 * blue;
@@ -62,8 +95,8 @@ __global__ void cudargblut2yuv(uint8_t *input, uint8_t *output) {
 		if(v < 0) v = 0;
 		else if(v > 255) v = 255;
 		
-		output[index] = u;
-		output[index + 1] = y;
+		output[index] = y;
+		output[index + 1] = u;
 		output[index + 2] = v;
 	}
 }
