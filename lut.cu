@@ -194,24 +194,60 @@ void applyLUTKernel(const uint8_t* input, uint8_t* output, int frameSize, const 
     frameSize >>= 1;
     for(int i = index; i < frameSize; i += stride) {
         // UYV values from UYVY frame
-        uint8_t U = input[(i << 2)];
-        uint8_t Y1 = input[(i << 2) + 1];
-        uint8_t V = input[(i << 2) + 2];
-        uint8_t Y2 = input[(i << 2) + 3];
+        float U = input[(i << 2)];
+        float Y1 = input[(i << 2) + 1];
+        float V = input[(i << 2) + 2];
+        float Y2 = input[(i << 2) + 3];
 
-        uint8_t pixel1U = lut[256 * 256 * 3 * Y1 + 256 * 3 * U + 3 * V + 1];
-        uint8_t pixel1Y = lut[256 * 256 * 3 * Y1 + 256 * 3 * U + 3 * V];
-        uint8_t pixel1V = lut[256 * 256 * 3 * Y1 + 256 * 3 * U + 3 * V + 2];
+        // changing from UYVY to RGB
+        Y1 -= 16;
+        Y2 -= 16;
+        U -= 128;
+        V -= 128;
 
-        uint8_t pixel2U = lut[256 * 256 * 3 * Y2 + 256 * 3 * U + 3 * V + 1];
-        uint8_t pixel2Y = lut[256 * 256 * 3 * Y2 + 256 * 3 * U + 3 * V];
-        uint8_t pixel2V = lut[256 * 256 * 3 * Y2 + 256 * 3 * U + 3 * V + 2];
+        float pixel1_R = Y1 * 1.164 + V * 1.596;
+        float pixel1_G = Y1 * 1.164 - U * 0.392 - V * 0.813;
+        float pixel1_B = Y1 * 1.164 + U * 2.017;
 
+        // clamping 
+        uint8_t R = (pixel1_R > 255) ? 255 : (pixel1_R < 0) ? 0 : pixel1_R;
+        uint8_t G = (pixel1_G > 255) ? 255 : (pixel1_G < 0) ? 0 : pixel1_G;
+        uint8_t B = (pixel1_B > 255) ? 255 : (pixel1_B < 0) ? 0 : pixel1_B;
+        
+        float R1 = lut[256 * 256 * 3 * R + 256 * 3 * G + 3 * B];
+        float G1 = lut[256 * 256 * 3 * R + 256 * 3 * G + 3 * B + 1];
+        float B1 = lut[256 * 256 * 3 * R + 256 * 3 * G + 3 * B + 2];
+
+        float pixel2_R = Y2 * 1.164 + V * 1.596;
+        float pixel2_G = Y2 * 1.164 - U * 0.392 - V * 0.813;
+        float pixel2_B = Y2 * 1.164 + U * 2.017;
+
+        // clamping
+        R = (pixel2_R > 255) ? 255 : (pixel2_R < 0) ? 0 : pixel2_R;
+        G = (pixel2_G > 255) ? 255 : (pixel2_G < 0) ? 0 : pixel2_G;
+        B = (pixel2_B > 255) ? 255 : (pixel2_B < 0) ? 0 : pixel2_B;
+
+        float R2 = lut[256 * 256 * 3 * R + 256 * 3 * G + 3 * B];
+        float G2 = lut[256 * 256 * 3 * R + 256 * 3 * G + 3 * B + 1];
+        float B2 = lut[256 * 256 * 3 * R + 256 * 3 * G + 3 * B + 2];
+
+        // changing from RGB to UYVY
+        float new_Y1 = 16 + (0.256 * R1 + 0.504 * G1 + 0.0979 * B1);
+        float new_V = 128 + (-0.148 * R1 - 0.291 * G1 + 0.439 * B1);
+        float new_U = 128 + (0.439 * R1 - 0.368 * G1 - 0.0714 * B1);
+        float new_Y2 = 16 + (0.256 * R2 + 0.504 * G2 + 0.0979 * B2); 
+
+        // clamp
+        new_Y1 = (new_Y1 > 255) ? 255 : (new_Y1 < 0) ? 0 : new_Y1;
+        new_V = (new_V > 255) ? 255 : (new_V < 0) ? 0 : new_V;
+        new_U = (new_U > 255) ? 255 : (new_U < 0) ? 0 : new_U;
+        new_Y2 = (new_Y2 > 255) ? 255 : (new_Y2 < 0) ? 0 : new_Y2;
+        
         // getting corresponding LUT[U1][Y1][V1] values to put back into the frame
-        output[(i << 2)] = (pixel1U + pixel2U) >> 1;
-        output[(i << 2) + 1] = pixel1Y; 
-        output[(i << 2) + 2] = (pixel1V + pixel2V) >> 1;
-        output[(i << 2) + 3] = pixel2Y;
+        output[(i << 2)] = new_U;
+        output[(i << 2) + 1] = new_Y1; 
+        output[(i << 2) + 2] = new_V;
+        output[(i << 2) + 3] = new_Y2;
 
         // normal frame
         // output[(i << 2)] = U;
